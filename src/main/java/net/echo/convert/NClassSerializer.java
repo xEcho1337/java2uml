@@ -10,6 +10,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 public class NClassSerializer {
 
@@ -52,24 +53,26 @@ public class NClassSerializer {
             Element relationships = document.createElement("Relationships");
             item.appendChild(relationships);
             
-            model.getDependencyGraph().forEach((x, y) -> {
-                Element relationship = document.createElement("Relationship");
-                relationship.setAttribute("type", "Dependency");
-                relationship.setAttribute("first", String.valueOf(x));
-                relationship.setAttribute("second", String.valueOf(y));
-                
-                relationship.appendChild(document.createElement("Label"));
-                
-                Element startOrientation = document.createElement("StartOrientation");
-                Element endOrientation = document.createElement("EndOrientation");
-                
-                startOrientation.setTextContent("Horizontal");
-                endOrientation.setTextContent("Horizontal");
-                
-                relationship.appendChild(startOrientation);
-                relationship.appendChild(endOrientation);
-                
-                relationships.appendChild(relationship);
+            model.getDependencyGraph().forEach((from, targets) -> {
+                for (int to : targets) {
+                    Element relationship = document.createElement("Relationship");
+                    relationship.setAttribute("type", "Dependency");
+                    relationship.setAttribute("first", String.valueOf(from));
+                    relationship.setAttribute("second", String.valueOf(to));
+                    
+                    relationship.appendChild(document.createElement("Label"));
+                    
+                    Element startOrientation = document.createElement("StartOrientation");
+                    Element endOrientation = document.createElement("EndOrientation");
+                    
+                    startOrientation.setTextContent("Horizontal");
+                    endOrientation.setTextContent("Horizontal");
+                    
+                    relationship.appendChild(startOrientation);
+                    relationship.appendChild(endOrientation);
+                    
+                    relationships.appendChild(relationship);
+                }
             });
             
             write(document, config.output());
@@ -88,14 +91,14 @@ public class NClassSerializer {
         for (UmlMember member : c.getFields()) {
             Element m = doc.createElement("Member");
             m.setAttribute("type", "Field");
-            m.setTextContent(formatMember(member));
+            m.setTextContent(formatField(member));
             entity.appendChild(m);
         }
 
         for (UmlMember mtd : c.getMethods()) {
             Element m = doc.createElement("Member");
             m.setAttribute("type", "Method");
-            m.setTextContent(formatMember(mtd) + "()");
+            m.setTextContent(formatMethod(mtd));
             entity.appendChild(m);
         }
 
@@ -103,10 +106,18 @@ public class NClassSerializer {
         return entity;
     }
 
-    private static String formatMember(UmlMember f) {
+    private static String formatField(UmlMember f) {
         return String.format("%s %s %s", f.visibility().toLowerCase(), f.type(), f.name());
     }
-
+    
+    private static String formatMethod(UmlMember m) {
+        String params = m.parameters().stream()
+            .map(p -> p.type() + " " + p.name())
+            .collect(Collectors.joining(", "));
+        
+        return String.format("%s %s %s(%s)", m.visibility().toLowerCase(), m.type(), m.name(), params);
+    }
+    
     private static void appendText(Document doc, Element parent, String tag, String text) {
         Element e = doc.createElement(tag);
         e.setTextContent(text);

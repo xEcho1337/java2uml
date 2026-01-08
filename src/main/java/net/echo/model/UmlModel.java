@@ -1,15 +1,12 @@
 package net.echo.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class UmlModel {
     
     private final List<UmlClass> classes = new ArrayList<>();
     private final Map<String, Integer> indexByName = new HashMap<>();
-    private final Map<Integer, Integer> dependencyGraph = new HashMap<>();
+    private final Map<Integer, Set<Integer>> dependencyGraph = new HashMap<>();
     
     public void addClass(UmlClass c) {
         indexByName.put(c.getName(), classes.size());
@@ -21,7 +18,9 @@ public class UmlModel {
     }
     
     public void addDependency(int fromIdx, int toIdx) {
-        dependencyGraph.put(fromIdx, toIdx);
+        dependencyGraph
+            .computeIfAbsent(fromIdx, k -> new HashSet<>())
+            .add(toIdx);
     }
     
     public List<UmlClass> getClasses() {
@@ -32,7 +31,7 @@ public class UmlModel {
         return indexByName;
     }
     
-    public Map<Integer, Integer> getDependencyGraph() {
+    public Map<Integer, Set<Integer>> getDependencyGraph() {
         return dependencyGraph;
     }
 }

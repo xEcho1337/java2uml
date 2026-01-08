@@ -6,10 +6,13 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import net.echo.model.UmlClass;
 import net.echo.model.UmlModel;
+import net.echo.model.UmlParameter;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UmlExtractor {
 
@@ -31,6 +34,7 @@ public class UmlExtractor {
                 Integer toIdx = model.indexOf(used);
                 
                 if (toIdx != null && fromIdx != toIdx) {
+                    System.out.println(from.getName() + " -> " + used);
                     model.addDependency(fromIdx, toIdx);
                 }
             }
@@ -70,14 +74,21 @@ public class UmlExtractor {
         c.getMethods().forEach(m -> {
             uc.uses(stripGeneric(m.getTypeAsString()));
             
-            m.getParameters().forEach(p ->
-                uc.uses(stripGeneric(p.getTypeAsString()))
-            );
+            List<UmlParameter> params = new ArrayList<>();
+            
+            m.getParameters().forEach(p -> {
+                String pName = p.getNameAsString();
+                String pType = p.getTypeAsString();
+                
+                params.add(new UmlParameter(pName, pType));
+                uc.uses(stripGeneric(pType));
+            });
             
             String name = m.getNameAsString();
             String type = m.getTypeAsString();
             String visibility = m.getAccessSpecifier().name();
-            uc.addMethod(name, type, visibility);
+            
+            uc.addMethod(name, type, visibility, params);
         });
 
         return uc;

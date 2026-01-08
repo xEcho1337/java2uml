@@ -1,0 +1,131 @@
+<Project>
+  <Name>scuola</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>libreria</Name>
+    <Language>Java</Language>
+    <Entities>
+      <Entity type="Class">
+        <Name>Libro</Name>
+        <Access>Public</Access>
+        <Location left="262" top="50" />
+        <Size width="162" height="434" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private String isbn</Member>
+        <Member type="Field">private int progressivo</Member>
+        <Member type="Field">private String[] autori</Member>
+        <Member type="Field">private String titolo</Member>
+        <Member type="Field">private char sala</Member>
+        <Member type="Field">private int scaffale</Member>
+        <Member type="Field">private int ripiano</Member>
+        <Member type="Method">public String getIsbn()</Member>
+        <Member type="Method">public void setIsbn(String isbn)</Member>
+        <Member type="Method">public int getProgressivo()</Member>
+        <Member type="Method">public void setProgressivo(int progressivo)</Member>
+        <Member type="Method">public String[] getAutori()</Member>
+        <Member type="Method">public void setAutori(String[] autori)</Member>
+        <Member type="Method">public String getTitolo()</Member>
+        <Member type="Method">public void setTitolo(String titolo)</Member>
+        <Member type="Method">public char getSala()</Member>
+        <Member type="Method">public void setSala(char sala)</Member>
+        <Member type="Method">public int getScaffale()</Member>
+        <Member type="Method">public void setScaffale(int scaffale)</Member>
+        <Member type="Method">public int getRipiano()</Member>
+        <Member type="Method">public void setRipiano(int ripiano)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Menu</Name>
+        <Access>Public</Access>
+        <Location left="599" top="50" />
+        <Size width="162" height="315" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private Scanner scanner</Member>
+        <Member type="Field">private Socio[] soci</Member>
+        <Member type="Field">private Libro[] libri</Member>
+        <Member type="Field">private Prestito[] prestiti</Member>
+        <Member type="Method">public void main(String[] args)</Member>
+        <Member type="Method">private void start()</Member>
+        <Member type="Method">private int trovaPrimoVuoto(Object[] array)</Member>
+        <Member type="Method">private void inserisciSocio()</Member>
+        <Member type="Method">private void inserisciLibro()</Member>
+        <Member type="Method">private void inserisciPrestito()</Member>
+        <Member type="Method">private void registraRiconsegna()</Member>
+        <Member type="Method">private void eliminaPrestitiScaduti()</Member>
+        <Member type="Method">private void visualizzaPrestitiScaduti()</Member>
+        <Member type="Method">private void visualizzaPrestiti()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Prestito</Name>
+        <Access>Public</Access>
+        <Location left="599" top="444" />
+        <Size width="162" height="281" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private LocalDate dataInizio</Member>
+        <Member type="Field">private Libro[] libriPrestati</Member>
+        <Member type="Field">private Socio socio</Member>
+        <Member type="Field">private boolean riconsegna</Member>
+        <Member type="Method">public LocalDate getDataInizio()</Member>
+        <Member type="Method">public void setDataInizio(LocalDate dataInizio)</Member>
+        <Member type="Method">public Libro[] getLibriPrestati()</Member>
+        <Member type="Method">public void setLibriPrestati(Libro[] libriPrestati)</Member>
+        <Member type="Method">public Socio getSocio()</Member>
+        <Member type="Method">public void setSocio(Socio socio)</Member>
+        <Member type="Method">public boolean isRiconsegna()</Member>
+        <Member type="Method">public void setRiconsegna(boolean riconsegna)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Socio</Name>
+        <Access>Public</Access>
+        <Location left="972" top="50" />
+        <Size width="162" height="434" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private int tessera</Member>
+        <Member type="Field">private String nome</Member>
+        <Member type="Field">private String cognome</Member>
+        <Member type="Field">private LocalDate dataNascita</Member>
+        <Member type="Field">private char sesso</Member>
+        <Member type="Field">private String email</Member>
+        <Member type="Field">private String telefono</Member>
+        <Member type="Method">public int getTessera()</Member>
+        <Member type="Method">public void setTessera(int tessera)</Member>
+        <Member type="Method">public String getNome()</Member>
+        <Member type="Method">public void setNome(String nome)</Member>
+        <Member type="Method">public String getCognome()</Member>
+        <Member type="Method">public void setCognome(String cognome)</Member>
+        <Member type="Method">public LocalDate getDataNascita()</Member>
+        <Member type="Method">public void setDataNascita(LocalDate dataNascita)</Member>
+        <Member type="Method">public char getSesso()</Member>
+        <Member type="Method">public void setSesso(char sesso)</Member>
+        <Member type="Method">public String getEmail()</Member>
+        <Member type="Method">public void setEmail(String email)</Member>
+        <Member type="Method">public String getTelefono()</Member>
+        <Member type="Method">public void setTelefono(String telefono)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Dependency" first="1" second="0">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Dependency" first="1" second="2">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Dependency" first="1" second="3">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Dependency" first="2" second="0">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Dependency" first="2" second="3">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>

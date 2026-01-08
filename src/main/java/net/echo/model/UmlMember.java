@@ -1,4 +1,5 @@
 package net.echo.model;
 
-public record UmlMember(String name, String type, String visibility) {
-}
+import java.util.List;
+
+public record UmlMember(String name, String type, String visibility, List<UmlParameter> parameters) {}

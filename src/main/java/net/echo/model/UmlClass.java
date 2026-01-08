@@ -17,11 +17,11 @@ public class UmlClass {
     }
 
     public void addField(String name, String type, String visibility) {
-        fields.add(new UmlMember(name, type, visibility));
+        fields.add(new UmlMember(name, type, visibility, List.of()));
     }
     
-    public void addMethod(String name, String ret, String visibility) {
-        methods.add(new UmlMember(name, ret, visibility));
+    public void addMethod(String name, String ret, String visibility, List<UmlParameter> params) {
+        methods.add(new UmlMember(name, ret, visibility, params));
     }
     
     public void uses(String type) {
