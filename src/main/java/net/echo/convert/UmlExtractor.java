@@ -34,7 +34,6 @@ public class UmlExtractor {
                 Integer toIdx = model.indexOf(used);
                 
                 if (toIdx != null && fromIdx != toIdx) {
-                    System.out.println(from.getName() + " -> " + used);
                     model.addDependency(fromIdx, toIdx);
                 }
             }
