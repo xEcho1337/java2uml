@@ -1,9 +1,10 @@
 plugins {
     id 'java'
+    id 'com.gradleup.shadow' version '9.3.0'
 }
 
 group = 'net.echo'
-version = '1.0-SNAPSHOT'
+version = '1.0'
 
 repositories {
     mavenCentral()
@@ -14,6 +15,9 @@ dependencies {
     implementation 'com.github.javaparser:javaparser-core:3.27.1'
 }
 
-test {
-    useJUnitPlatform()
+shadowJar {
+    archiveClassifier.set('')
+    manifest {
+        attributes 'Main-Class': 'net.echo.Main'
+    }
 }

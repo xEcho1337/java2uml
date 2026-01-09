@@ -22,11 +22,14 @@ public record CliConfig(String projectName, String diagram, Path srcDir, Path ou
         
         if (projectName == null || srcDir == null || output == null) {
             String message = """
-                Missing arguments! Options:
-                --project <NAME> Specifies the output program name
-                --diagram <NAME> Specifies the output diagram name
-                --src <DIR> Specifies the directory to scrape the files from
-                --out <NAME> Specifies the name of the output file
+                Usage is: java2uml [options]
+                Runtime:
+                    --project <name>       Specifies the output program name
+                    --diagram <name>       Specifies the output diagram name
+                    --src <dir_path>       Specifies the directory to scrape the files from
+                    --out <name>           Specifies the name of the output file
+
+                Example: java2uml --project school --diagram library --src . --out uml.ncp
                 """;
             throw new IllegalArgumentException(message);
         }
