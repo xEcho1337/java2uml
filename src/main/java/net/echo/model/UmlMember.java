@@ -2,4 +2,11 @@ package net.echo.model;
 
 import java.util.List;
 
-public record UmlMember(String name, String type, String visibility, List<UmlParameter> parameters) {}
+public record UmlMember(
+    String name,
+    String type,
+    String visibility,
+    boolean isStatic,
+    boolean isAbstract,
+    List<UmlParameter> parameters
+) {}
