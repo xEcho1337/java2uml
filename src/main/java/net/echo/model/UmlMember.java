@@ -8,5 +8,6 @@ public record UmlMember(
     String visibility,
     boolean isStatic,
     boolean isAbstract,
+    boolean isConstructor,
     List<UmlParameter> parameters
 ) {}

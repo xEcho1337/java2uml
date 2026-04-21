@@ -3,7 +3,11 @@ package net.echo.convert;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.RecordDeclaration;
 import net.echo.model.UmlClass;
 import net.echo.model.UmlModel;
 import net.echo.model.UmlParameter;
@@ -70,7 +74,9 @@ public class UmlExtractor {
 
             CompilationUnit unit = result.orElseThrow();
             unit.findAll(ClassOrInterfaceDeclaration.class)
-              .forEach(c -> model.addClass(parseClass(c)));
+                .forEach(c -> model.addClass(parseClass(c)));
+            unit.findAll(RecordDeclaration.class)
+                .forEach(r -> model.addClass(parseRecord(r)));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -109,19 +115,62 @@ public class UmlExtractor {
         });
 
         // METHODS
-        c.getMethods().forEach(m -> {
-            List<UmlParameter> params = m.getParameters().stream()
-                .map(p -> new UmlParameter(p.getNameAsString(), p.getTypeAsString()))
-                .toList();
-
-            String name = m.getNameAsString();
-            String type = m.getTypeAsString();
-            String accessor = m.getAccessSpecifier().name();
-
-            uc.addMethod(name, type, accessor, m.isStatic(), m.isAbstract(), params);
-        });
+        c.getMethods().forEach(m -> addMethod(uc, m));
+        c.getConstructors().forEach(ctor -> addConstructor(uc, ctor));
 
         return uc;
+    }
+
+    private UmlClass parseRecord(RecordDeclaration r) {
+        UmlClass uc = new UmlClass(
+            r.getNameAsString(),
+            false,
+            false,
+            true,
+            false,
+            true
+        );
+
+        r.getImplementedTypes().forEach(impl -> {
+            uc.addInterface(stripGeneric(impl.getNameAsString()));
+        });
+
+        r.getParameters().forEach(component ->
+            uc.addField(component.getNameAsString(), component.getTypeAsString(), "PRIVATE", false)
+        );
+
+        for (BodyDeclaration<?> member : r.getMembers()) {
+            if (member instanceof MethodDeclaration method) {
+                addMethod(uc, method);
+            } else if (member instanceof ConstructorDeclaration constructor) {
+                addConstructor(uc, constructor);
+            }
+        }
+
+        return uc;
+    }
+
+    private void addMethod(UmlClass umlClass, MethodDeclaration m) {
+        List<UmlParameter> params = m.getParameters().stream()
+            .map(p -> new UmlParameter(p.getNameAsString(), p.getTypeAsString()))
+            .toList();
+
+        umlClass.addMethod(
+            m.getNameAsString(),
+            m.getTypeAsString(),
+            m.getAccessSpecifier().name(),
+            m.isStatic(),
+            m.isAbstract(),
+            params
+        );
+    }
+
+    private void addConstructor(UmlClass umlClass, ConstructorDeclaration c) {
+        List<UmlParameter> params = c.getParameters().stream()
+            .map(p -> new UmlParameter(p.getNameAsString(), p.getTypeAsString()))
+            .toList();
+
+        umlClass.addConstructor(c.getNameAsString(), c.getAccessSpecifier().name(), params);
     }
 
     private String stripGeneric(String t) {

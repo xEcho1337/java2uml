@@ -163,12 +163,11 @@ public class NClassSerializer {
         if (m.isStatic()) prefix += " static";
         if (m.isAbstract()) prefix += " abstract";
 
-        return String.format("%s %s %s(%s)",
-            prefix,
-            m.type(),
-            m.name(),
-            params
-        );
+        if (m.isConstructor()) {
+            return String.format("%s %s(%s)", prefix, m.name(), params);
+        }
+
+        return String.format("%s %s %s(%s)", prefix, m.type(), m.name(), params);
     }
 
     

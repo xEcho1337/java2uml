@@ -33,7 +33,7 @@ public class UmlClass {
     }
 
     public void addField(String name, String type, String visibility, boolean isStatic) {
-        fields.add(new UmlMember(name, type, visibility, isStatic, false, List.of()));
+        fields.add(new UmlMember(name, type, visibility, isStatic, false, false, List.of()));
     }
 
     public void addMethod(String name,
@@ -42,7 +42,13 @@ public class UmlClass {
                           boolean isStatic,
                           boolean isAbstract,
                           List<UmlParameter> params) {
-        methods.add(new UmlMember(name, ret, visibility, isStatic, isAbstract, params));
+        methods.add(new UmlMember(name, ret, visibility, isStatic, isAbstract, false, params));
+    }
+
+    public void addConstructor(String name,
+                               String visibility,
+                               List<UmlParameter> params) {
+        methods.add(new UmlMember(name, "", visibility, false, false, true, params));
     }
 
     public void addInterface(String iface) {
